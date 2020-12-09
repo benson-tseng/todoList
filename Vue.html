@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div style="text-align: center; margin: 10%">
+        <div
+          style="
+            display: inline-block;
+            height: 400px;
+            width: 400px;
+            vertical-align: middle;
+          "
+        >
+          <h1>WHAT TO DO?</h1>
+          <input type="text" v-model="message" style="width: 250px" />
+          <h1>COLOR?</h1>
+          <input type="text" v-model="tmpStyle" style="width: 250px" />
+          <p>
+            <button @click="changeColor">change color</button>
+          </p>
+          <div style="min-height: 30px">
+            <span style="font-size: 25px" :style="messageStyle"
+              >{{message}}</span
+            >
+          </div>
+          <p><button @click="add">add</button></p>
+          <p>
+            <button @click="()=>{this.showList=!this.showList}">
+              show list
+            </button>
+          </p>
+        </div>
+        <div
+          v-if="showList"
+          style="display: inline-block; vertical-align: middle"
+        >
+          <div style="border: solid black 1px; height: 400px; width: 300px">
+            <h2>List</h2>
+            <ul style="margin-left: 35px">
+              <!-- <li
+                style="text-align: start; line-height: 50px; font-size: 20px"
+                :style="todo.style"
+                v-for="todo in todoList"
+              >
+                {{todo.text}}
+              </li> -->
+              <list
+                style="text-align: start; line-height: 50px; font-size: 20px"
+                v-for="todo in todoList"
+                :item="todo"
+                :style="todo.style"
+              ></list>
+            </ul>
+          </div>
+          <p>
+            <button
+              style="margin-top: -100px; position: relative"
+              @click="()=>{todoList.pop()}"
+            >
+              pop one
+            </button>
+          </p>
+        </div>
+      </div>
+    </div>
+    <script>
+      var app = new Vue({
+        el: "#app",
+        data: {
+          message: null,
+          messageStyle: null,
+          tmpStyle: null,
+          showList: true,
+          todoList: [],
+        },
+        methods: {
+          add() {
+            this.todoList.push({
+              text: this.message,
+              style: this.messageStyle,
+            });
+            this.message = null;
+            this.messageStyle = null;
+            this.tmpStyle = null;
+          },
+          changeColor() {
+            this.messageStyle = `color:${this.tmpStyle}`;
+          },
+        },
+      });
+      Vue.component("list", {
+        props: ["item"],
+        template: "<li>{{ item.text }}</li>",
+      });
+    </script>
+  </body>
+</html>
